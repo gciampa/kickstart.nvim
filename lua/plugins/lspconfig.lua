@@ -103,9 +103,9 @@ return {
         -- The following code creates a keymap to toggle inlay hints in your
         -- code, if the language server you are using supports them
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-          map('<leader>th', function()
+          map('<leader>uh', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-          end, '[T]oggle Inlay [H]ints')
+          end, 'Toggle inlay [h]ints')
         end
       end,
     })
@@ -160,12 +160,26 @@ return {
           },
         },
       },
+
+      ruby_lsp = {
+        init_options = {
+          formatter = 'standard',
+          linters = { 'standard' },
+          addonSettings = {
+            ['Ruby LSP Rails'] = {
+              enablePendingMigrationsPrompt = false,
+            },
+          },
+        },
+      },
     }
 
     -- Ensure the servers and tools above are installed
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'erb-formatter', -- Used to format ERB files
+      'erb-lint', -- Used to lint ERB files
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
